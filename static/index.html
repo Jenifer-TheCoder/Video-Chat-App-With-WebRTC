@@ -84,8 +84,21 @@
         function handleIce(candidate) {
             peerConnection.addIceCandidate(new RTCIceCandidate(JSON.parse(candidate)));
         }
+        function endCall() {
+            if (localStream) {
+                localStream.getTracks().forEach(track => track.stop()); // Stop all tracks (audio & video)
+            }
 
+            if (peerConnection) {
+                peerConnection.close(); // Close WebRTC connection
+                peerConnection = null;
+            }
+
+            document.getElementById("localVideo").srcObject = null; // Remove video feed
+            document.getElementById("remoteVideo").srcObject = null;
+    }
         document.getElementById("startCall").addEventListener("click", startCall);
+        document.getElementById("endCall").addEventListener("click", endCall);
     </script>
 </body>
 </html>
